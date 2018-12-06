@@ -1,4 +1,11 @@
-(function () {
+// import * as Vector2 from './vector2.js';
+
+/**
+ * http://www.somethinghitme.com/2013/11/13/snippets-i-always-forget-movement/
+ * https://developer.mozilla.org/en-US/docs/Games/Techniques
+ */
+
+;(function () {
 
     // Init
     var canvas = document.getElementById('snow-canvas');
@@ -26,7 +33,7 @@
 
     function init() {
         // Start the loop
-        loop();
+        main();
     }
 
     init();
@@ -53,9 +60,9 @@
         });
     }
 
-    function loop() {
+    function main() {
 
-        requestAnimationFrame(loop);
+        requestAnimationFrame(main);
 
         const now = performance.now();
         state.elapsed = now - state.prev;
@@ -82,7 +89,7 @@
         });
 
         // spawn new snowflakes
-        if (state.frame % 2 === 0) {
+        if (state.frame % 1 === 0) {
             snowflake();
         }
 
