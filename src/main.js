@@ -20,7 +20,6 @@
     let dt = 0;
     let elapsed = 0;
 
-
     function start() {
         then = performance.now();
 
@@ -46,13 +45,20 @@
     }
 
     function update(dt) {
-        // console.log('update');
+        // move snowflakes
+        snowflakes = snowflakes.map(p => {
+            // p.x += p.velocity.x;
+            p.x += Math.sin(p.velocity.y / 25) / 2;
+            p.y += p.velocity.y;
+            return p;
+        });
     }
 
     function render(dt) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBall(dt);
-        // console.log('render');
+
+        // TODO: move
+        snowflakes.forEach(p => renderSnowflake(p));
     }
 
     function debug(dt) {
@@ -72,12 +78,36 @@
      * MOVE STUFF BELOW
      */
 
-    function drawBall() {
+    let snowflakes = [];
+    for (let i = 0; i < 100; i++) {
+        snowflakes.push({
+            x: Math.floor(Math.random() * canvas.width),
+            y: 0,
+            age: 0,
+            velocity: new Vector2(0, 1), //randomBetween(1, 3)
+            opacity: randomBetween(.1, .8),
+            radius: randomBetween(2, 4)
+        });
+    }
+
+    function renderSnowflake(snowflake) {
         ctx.beginPath();
-        ctx.fillStyle = `rgb(255, 255, 255, 1)`;
-        ctx.arc(100, 100, 20, 0, Math.PI * 2, true);
+        ctx.fillStyle = `rgb(255, 255, 255, ${snowflake.opacity})`;
+        ctx.arc(snowflake.x, snowflake.y, snowflake.radius, 0, Math.PI * 2, true);
         ctx.fill();
         ctx.closePath();
+
+        ctx.beginPath();
+        ctx.strokeStyle = `blue`;
+        ctx.moveTo(snowflake.x, snowflake.y);
+        ctx.lineTo(snowflake.x + snowflake.velocity.x * 10, snowflake.y + snowflake.velocity.y * 10);
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    function randomBetween(min, max, round = false) {
+        const result = Math.random() * (max - min) + min;
+        return !round ? result : Math.floor(result);
     }
 
 })();
